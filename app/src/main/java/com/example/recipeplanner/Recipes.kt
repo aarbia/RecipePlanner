@@ -9,7 +9,7 @@ data class Recipes(
     val servings: Int
 )
 
-val Recipe = listOf(
+val recipe = listOf(
     Recipes("Chicken Pillows", 20, 40,
         listOf("1lb Chicken Breast, diced", "1 Tbsp Cooking Oil", "2 Tbsp Minced Garlic",
             "2 Tbsp Italian Seasoning","8oz Onion and Chive Cream Cheese",
@@ -20,5 +20,5 @@ val Recipe = listOf(
             "Step 3: Add cream cheese to chicken, mix thoroughly.",
             "Step 4: Fill crescent rolls with chicken mix, then roll in breadcrumbs before placing on baking sheet.",
             "Step 5: Cook pillows according to crescent roll packaging, while cooking add gravy to skillet with leftover " +
-                    "chicken & cream cheese mixture. Serve warm over mashed potatoes or rice"),6)
+                    "chicken & cream cheese mixture. Serve warm over mashed potatoes or rice."),6)
 )

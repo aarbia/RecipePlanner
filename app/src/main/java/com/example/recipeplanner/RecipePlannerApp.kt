@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 fun RecipePlannerApp() {
     var menuExpanded by remember { mutableStateOf(false) }
     val navHostController = rememberNavController()
+    var myIndex = 0
 
     // observe (highlight) the correct bottom navigation icon when the user switches screens.
     val currentScreen by navHostController.currentBackStackEntryAsState()
@@ -85,7 +86,16 @@ fun RecipePlannerApp() {
             composable("Home") { HomeScreen() }
             composable("Menu") { MenuScreen() }
             composable("Shopping") { ShoppingScreen() }
-            composable("Recipes") { RecipeScreen() }
+            composable("Recipes") {
+                RecipeListScreen(onRecipeClick = { index ->
+                    myIndex = index
+                    navHostController.navigate("detail")
+                })
+            }
+            composable("detail") {
+                RecipeDetailScreen(index = myIndex,
+                    onBack = {navHostController.popBackStack()})
+            }
 
         }
     }

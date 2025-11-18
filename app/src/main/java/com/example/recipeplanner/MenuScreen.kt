@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun MenuScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Home Screen",
+        Text("Weekly Menu Screen",
             style = MaterialTheme.typography.headlineMedium,
 
         )

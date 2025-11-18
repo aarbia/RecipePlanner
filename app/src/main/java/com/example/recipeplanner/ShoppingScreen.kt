@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ShoppingScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Home Screen",
+        Text("Shopping List Screen",
             style = MaterialTheme.typography.headlineMedium,
 
         )
