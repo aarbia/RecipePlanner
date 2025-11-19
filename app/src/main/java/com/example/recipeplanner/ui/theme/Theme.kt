@@ -31,6 +31,26 @@ private val LightColorScheme = lightColorScheme(
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
     */
+
+)
+
+val AppColorScheme = lightColorScheme(
+    primary = Cream,
+    onPrimary = MauveBark,
+    secondary = BurntPeach,
+    onSecondary = White,
+    tertiary = Fern,
+    onTertiary = White,
+    primaryContainer = White,
+    onPrimaryContainer = MauveBark,
+    secondaryContainer = Cream,
+    onSecondaryContainer = MauveBark,
+    error = CandyApple,
+    onError = White,
+    background = White,
+    onBackground = MauveBark,
+    surface = White,
+    onSurface = MauveBark
 )
 
 @Composable
