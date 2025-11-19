@@ -28,13 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipePlannerApp() {
     var menuExpanded by remember { mutableStateOf(false) }
     val navHostController = rememberNavController()
-    var myIndex = 0
+    var myIndex by remember { mutableStateOf(0) }
 
     // observe (highlight) the correct bottom navigation icon when the user switches screens.
     val currentScreen by navHostController.currentBackStackEntryAsState()
@@ -47,7 +46,7 @@ fun RecipePlannerApp() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text=currentTitle, color = currentColor) },
+                title = { Text(text=currentTitle, color =currentColor) },
             )
         },
         bottomBar = {
@@ -79,7 +78,7 @@ fun RecipePlannerApp() {
         // Provides a place in the Compose hierarchy/map
         NavHost(
             navController = navHostController,
-            startDestination = "home",
+            startDestination = "Home",
             modifier = Modifier.padding(padding),
 
             ) {
@@ -89,10 +88,10 @@ fun RecipePlannerApp() {
             composable("Recipes") {
                 RecipeListScreen(onRecipeClick = { index ->
                     myIndex = index
-                    navHostController.navigate("detail")
+                    navHostController.navigate("Details")
                 })
             }
-            composable("detail") {
+            composable("Details") {
                 RecipeDetailScreen(index = myIndex,
                     onBack = {navHostController.popBackStack()})
             }
