@@ -106,12 +106,23 @@ fun RecipePlannerApp() {
                     RecipeListScreen(onRecipeClick = { index ->
                         myIndex = index
                         navHostController.navigate("Details")
+                    },
+                        onAddClick = {
+                        navHostController.navigate("Add New Recipe")
                     })
                 }
                 composable("Details") {
                     RecipeDetailScreen(
                         index = myIndex,
                         onBack = { navHostController.popBackStack() })
+                }
+                composable("Add New Recipe") {
+                    RecipeAddScreen(
+                        onBack = { navHostController.popBackStack() },
+                        onSave = {
+                            //need to add saving info to recipes here,
+                            navHostController.popBackStack()
+                        })
                 }
 
             }
