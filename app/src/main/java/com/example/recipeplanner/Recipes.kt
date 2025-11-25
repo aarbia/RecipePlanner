@@ -93,6 +93,7 @@ val recipe = mutableListOf(
             "Sift in flour and cocoa powder (add chocolate chips or nuts if using) do NOT overmix!",
             "Bake for 23-26 minutes."),
         9, "Dessert", R.drawable.fugeybrownies),
+
     Recipes("Cinnamon Roll French Toast Bake", 15, 45,
         listOf("1/4 cup melted butter",
             "2 cans cinnamon rolls",
@@ -126,5 +127,56 @@ val recipe = mutableListOf(
             "Add chocolate chips to mix.",
             "Roll 2-3 Tbsp of dough at a time to form cookies. Bakes for 12 minutes, until just barely browning.",
             "Let sit on sheet for 2 minutes then move to cooling rack."),
-        30, "Dessert", R.drawable.chocchipcookies)
-)
+        30, "Dessert", R.drawable.chocchipcookies),
+
+    Recipes("Fluffy Pancakes", 5,10,
+        listOf("1 1/2 cups all purpose flour",
+            "2 1/2 teaspoons baking powder",
+            "1/2 teaspoon salt",
+            "1 tablespoon sugar",
+            "1 1/4 sups milk",
+            "1 egg",
+            "3 tablespoons butter, melted",
+            "2 teaspoons vanilla extract (optional)",
+            ),
+     listOf("In a large bowl, sift together the flour, baking powder, salt and sugar.",
+         "Make a well in the middle and pour in the milk, egg, butter and vanilla extract.",
+         "Combine until mostly smooth.",
+         "Heat a large pan over medium-high heat. Once hot, grease, spray or melt butter on the pan.",
+         "Pour 1/4 cup of pancake batter onto pan.",
+         "Cook pancakes for about 2 minutes, until edges begin to look defined and bubbles form.",
+         "Flip the pancakes over and cook for another minute on the other side",
+         "Remove pancakes from pan onto a plate and keep warm while cooking the rest of the batter."),
+        4, "Breakfast", R.drawable.pancake),
+     Recipes("Egg Bites", 10,40,
+         listOf("2 tablespoons olive oil",
+             "1/2 red onion, diced",
+             "1/2 chopped red pepper",
+             "1 cup chopped broccoli florets",
+             "1 small zucchini, diced",
+             "2 cloves of garlic, minced",
+             "1 1/2 packed cups baby spinach",
+             "10 large eggs",
+             "3/4 cup cottage cheese",
+             "1 teaspoon salt",
+             "1/2 teaspoon black pepper",
+             "1 teaspoon dried oregano",
+             "2/3 cup grated cheddar cheese",
+             "8 ounces bacon, cooked and crumbled (optional)"),
+         listOf("Pre-heat over to 350F, and grease a muffin pan with butter or cooking spray ",
+             "Heat the olive oil over medium-high heat in a large skillet.",
+             "Add the onion and bell pepper and saute for 2 minutes. Then add brocoli and zucchini.",
+             "Saute until vegtables has softened. Add garlic and spinach and saute for a minute",
+             "Turn off heat and set pan aside.",
+             "Add the ggs, cottage cheese, salt, pepper and oregano into a blender and blend until well combined.",
+             "Add sauteed veggies, egg micture, cheese and bacon into large mixing bowl and stir",
+             "Ladle egg micture into muffin pan filling each to the top",
+             "Bake for 22-25 minutes",
+             "Remove pan from oven and let egg bites cool for 5 minutes before removing."),
+         12, "Breakfast", R.drawable.eggbites)
+
+
+
+
+
+ )
