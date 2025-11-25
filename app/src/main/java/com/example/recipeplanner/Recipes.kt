@@ -15,7 +15,7 @@ data class Recipes(
 )
 
  // sample recipe list
-val recipe = listOf(
+val recipe = mutableListOf(
     Recipes("Chicken Pillows", 20, 30,
         listOf("1lb Chicken Breast, diced", "1 Tbsp Cooking Oil", "2 Tbsp Minced Garlic",
             "2 Tbsp Italian Seasoning","8oz Onion and Chive Cream Cheese",

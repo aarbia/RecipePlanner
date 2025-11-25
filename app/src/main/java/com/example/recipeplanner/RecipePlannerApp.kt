@@ -119,10 +119,8 @@ fun RecipePlannerApp() {
                 composable("Add New Recipe") {
                     RecipeAddScreen(
                         onBack = { navHostController.popBackStack() },
-                        onSave = {
-                            //need to add saving info to recipes here,
-                            navHostController.popBackStack()
-                        })
+                        onSave = { navHostController.popBackStack() }
+                    )
                 }
 
             }

@@ -48,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
+import kotlin.Int
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -256,7 +257,8 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
                                     Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                // save to recipes
+                                val newRecipe = Recipes(name, prepTimeMin.toInt(), cookTimeMin.toInt(), ingredientsText, directionsText, servings.toInt(), meal)
+                                recipe.add(newRecipe)
                                 onSave()
                             }
                         }
