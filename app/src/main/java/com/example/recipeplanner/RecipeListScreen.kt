@@ -8,8 +8,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
@@ -18,10 +21,43 @@ import com.example.recipeplanner.ui.theme.MauveBark
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeListScreen(onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedMeal by remember { mutableStateOf("All")}
+    var mealOptions = listOf("All", "Breakfast", "Lunch", "Dinner", "Snack", "Appetizer", "Dessert")
+
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)    //Add a padding before the first item (you could just use Modifier.padding(60.dp))
     )
     {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {expanded = !expanded}
+        ) {
+            OutlinedTextField(
+                value = selectedMeal,
+                onValueChange = {},
+                readOnly = true,
+                label = { Text(text = "Filter by Category", color = MauveBark)},
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                mealOptions.forEach { selectionOption ->
+                    DropdownMenuItem(
+                        text = {Text(text = selectionOption)},
+                        onClick = {
+                            selectedMeal = selectionOption
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
         Card(   // Card is similar to Surface and Box, just provide different UI
             colors = CardDefaults.cardColors(
                 containerColor = Cream
@@ -44,9 +80,18 @@ fun RecipeListScreen(onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
             }
         }
         Spacer(Modifier.height(8.dp))
+
+        val filteredList = remember(selectedMeal) {
+            if (selectedMeal == "All") {
+                recipe
+            } else {
+                recipe.filter { it.meal == selectedMeal }
+            }
+        }
+
         LazyColumn() {
             // itemsIndexed is a LazyColumn extension function to iterate over a list and access both the item and index
-            itemsIndexed(recipe) { index, item ->
+            itemsIndexed(filteredList) { index, item ->
                 Card(   // Card is similar to Surface and Box, just provide different UI
                     colors = CardDefaults.cardColors(
                         containerColor = Cream

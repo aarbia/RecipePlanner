@@ -1,9 +1,8 @@
 package com.example.recipeplanner
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,13 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,15 +36,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
-import kotlin.Int
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +51,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
     var directionsText = remember { mutableStateListOf("") }
     var servings by remember { mutableStateOf("") }
     var meal by remember { mutableStateOf("") }
-    var image by remember { mutableStateOf("") }
+    @DrawableRes val image by remember { mutableStateOf(R.drawable.defaultrecipe) }
 
     val mealOptions = listOf("Breakfast", "Lunch", "Dinner", "Snack", "Appetizer", "Dessert")
     var expanded by remember { mutableStateOf(false) }
@@ -115,7 +106,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
                     readOnly = true,
                     value = selectedOptionText,
                     onValueChange = { },
-                    label = { Text("Meal Type") },
+                    label = { Text(text = "Meal Type", color = MauveBark) },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
                             expanded = expanded
@@ -257,7 +248,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
                                     Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                val newRecipe = Recipes(name, prepTimeMin.toInt(), cookTimeMin.toInt(), ingredientsText, directionsText, servings.toInt(), meal)
+                                val newRecipe = Recipes(name, prepTimeMin.toInt(), cookTimeMin.toInt(), ingredientsText, directionsText, servings.toInt(), meal, image)
                                 recipe.add(newRecipe)
                                 onSave()
                             }
