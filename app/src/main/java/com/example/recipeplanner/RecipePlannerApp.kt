@@ -107,7 +107,8 @@ fun RecipePlannerApp() {
                 composable("Details") {
                     RecipeDetailScreen(
                         index = myIndex,
-                        onBack = { navHostController.popBackStack() })
+                        onBack = { navHostController.popBackStack() }
+                    )
                 }
                 composable("Add New Recipe") {
                     RecipeAddScreen(
