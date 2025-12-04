@@ -2,19 +2,18 @@ package com.example.recipeplanner.data.local
 
 import androidx.room.*
 import com.example.recipeplanner.data.RecipeWithDetails
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDAO {
     //All recipes with ingredients and directions
     @Transaction
-    @Query("SELECT * FROM recipes GROUP BY meal")
-    fun getAllRecipesWithDetails(): Flow<List<RecipeWithDetails>>
+    @Query("SELECT * FROM recipes ORDER BY name")
+    suspend fun getAllRecipesWithDetails(): List<RecipeWithDetails>
 
     //Single recipe with ingredients and directions
     @Transaction
     @Query("SELECT * FROM recipes WHERE recipe_id = :id")
-    fun getRecipeWithDetails(id: Int): Flow<List<RecipeWithDetails>>
+    suspend fun getRecipeWithDetails(id: Int): List<RecipeWithDetails>
 
     //Insert
     @Insert

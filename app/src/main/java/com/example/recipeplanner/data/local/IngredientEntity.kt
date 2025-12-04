@@ -19,7 +19,7 @@ import com.example.recipeplanner.data.local.RecipeEntity
     indices = [Index("recipe_id")]
     )
 data class IngredientEntity(
-    @PrimaryKey(autoGenerate = true) val id : Int,
+    @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val recipe_id : Int,
     val position : Int,
     val ingredient : String
