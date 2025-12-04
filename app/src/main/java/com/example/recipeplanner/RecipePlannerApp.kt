@@ -26,7 +26,6 @@ import com.example.recipeplanner.ui.theme.AppColorScheme
 import com.example.recipeplanner.ui.theme.BurntPeach
 import com.example.recipeplanner.ui.theme.MauveBark
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipePlannerApp() {
@@ -42,6 +41,7 @@ fun RecipePlannerApp() {
     val navItems = item
     var currentColor =
         navItems.find { it -> currentScreen?.destination?.route == it.route }?.color ?: Color(0xFF483228)
+
     MaterialTheme(
         colorScheme = AppColorScheme
     ) {
@@ -71,10 +71,8 @@ fun RecipePlannerApp() {
                                 selectedTextColor = navItem.color,
                                 unselectedIconColor = MauveBark,
                                 unselectedTextColor = MauveBark,
-
                                 indicatorColor = Color.Transparent
                             ),
-                            // selected = true : the item is highlighted (you may have customized effect).
                             selected = currentScreen?.destination?.route == navItem.route,
                             onClick = {
                                 currentColor = navItem.color
@@ -84,25 +82,30 @@ fun RecipePlannerApp() {
                     }
                 }
             }
-        ) { padding -> // "padding" (similar to "it") ensure that main content doesn't overlap with other UI (e.g.,TopAppBar)
-            // Provides a place in the Compose hierarchy/map
+        ) { padding ->
             NavHost(
                 navController = navHostController,
                 startDestination = "Home",
                 modifier = Modifier.padding(padding),
-
-                ) {
+            ) {
                 composable("Home") { HomeScreen() }
-                composable("Menu") { MenuScreen() }
-                composable("Shopping") { ShoppingScreen() }
-                composable("Recipes") {
-                    RecipeListScreen(onRecipeClick = { index ->
+                composable("Menu") {
+                    MenuScreen(onRecipeClick = { index ->
                         myIndex = index
                         navHostController.navigate("Details")
-                    },
-                        onAddClick = {
-                        navHostController.navigate("Add New Recipe")
                     })
+                }
+                composable("Shopping") { ShoppingScreen() }
+                composable("Recipes") {
+                    RecipeListScreen(
+                        onRecipeClick = { index ->
+                            myIndex = index
+                            navHostController.navigate("Details")
+                        },
+                        onAddClick = {
+                            navHostController.navigate("Add New Recipe")
+                        }
+                    )
                 }
                 composable("Details") {
                     RecipeDetailScreen(
@@ -116,7 +119,6 @@ fun RecipePlannerApp() {
                         onSave = { navHostController.popBackStack() }
                     )
                 }
-
             }
         }
     }
