@@ -12,16 +12,16 @@ import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
 
 @Composable
-fun MenuScreen(onRecipeClick: (Int) -> Unit) {
+fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
     val daysOfWeek = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
     // Pre-select 7 unique recipes for each meal type
-    val breakfasts = remember { recipe.filter { it.meal == "Breakfast" }.shuffled().take(7) }
-    val dinners = remember { recipe.filter { it.meal == "Dinner" }.shuffled().take(7) }
-    val desserts = remember { recipe.filter { it.meal == "Dessert" }.shuffled().take(7) }
+    val breakfasts = remember(recipes) { recipes.filter { it.meal == "Breakfast" }.shuffled().take(7) }
+    val dinners = remember(recipes) { recipes.filter { it.meal == "Dinner" }.shuffled().take(7) }
+    val desserts = remember(recipes) { recipes.filter { it.meal == "Dessert" }.shuffled().take(7) }
 
     // Assign one recipe per meal per day
-    val weeklyMenu = remember {
+    val weeklyMenu = remember(recipes) {
         daysOfWeek.indices.associate { i ->
             daysOfWeek[i] to mapOf(
                 "Breakfast" to breakfasts.getOrNull(i),
@@ -49,12 +49,12 @@ fun MenuScreen(onRecipeClick: (Int) -> Unit) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     menu.forEach { (mealType, recipeItem) ->
-                        recipeItem?.let {
+                        recipeItem?.let { recipe ->
                             Text(
-                                text = "$mealType: ${it.name}",
+                                text = "$mealType: ${recipe.name}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier
-                                    .clickable { onRecipeClick(recipe.indexOf(it)) }
+                                    .clickable { onRecipeClick(recipes.indexOf(recipe)) }
                                     .padding(vertical = 2.dp)
                             )
                         }

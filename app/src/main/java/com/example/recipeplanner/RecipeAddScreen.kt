@@ -43,7 +43,7 @@ import com.example.recipeplanner.ui.theme.MauveBark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
+fun RecipeAddScreen(onBack: () -> Unit, onSave: (Recipes, List<String>, List<String>) -> Unit) {
     var name by remember { mutableStateOf("") }
     var prepTimeMin by remember { mutableStateOf("") }
     var cookTimeMin by remember { mutableStateOf("") }
@@ -53,7 +53,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
     var meal by remember { mutableStateOf("") }
     @DrawableRes val image by remember { mutableStateOf(R.drawable.defaultrecipe) }
 
-    val mealOptions = listOf("Breakfast", "Lunch", "Dinner", "Snack", "Appetizer", "Dessert")
+    val mealOptions = listOf("Breakfast", "Lunch", "Dinner", "Appetizer", "Dessert")
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(mealOptions[0]) }
 
@@ -248,9 +248,16 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: () -> Unit) {
                                     Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                val newRecipe = Recipes(name, prepTimeMin.toInt(), cookTimeMin.toInt(), ingredientsText, directionsText, servings.toInt(), meal, image)
-                                recipe.add(newRecipe)
-                                onSave()
+                                val newRecipe = Recipes(
+                                    name = name,
+                                    prepTimeMin = prepTimeMin.toInt(),
+                                    cookTimeMin = cookTimeMin.toInt(),
+                                    ingredients = ingredientsText.toList(),
+                                    directions = directionsText.toList(),
+                                    servings = servings.toInt(),
+                                    meal = meal,
+                                    image = image)
+                                onSave(newRecipe, ingredientsText.toList(), directionsText.toList())
                             }
                         }
                     },

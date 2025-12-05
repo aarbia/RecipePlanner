@@ -2,6 +2,7 @@ package com.example.recipeplanner.data
 
 import com.example.recipeplanner.Recipes
 
+// This class will convert DB joined object -> UI model
 fun RecipeWithDetails.toModel(): Recipes =
     Recipes(
         name = recipe.name,

@@ -1,5 +1,6 @@
 package com.example.recipeplanner.data
 
+import android.util.Log
 import com.example.recipeplanner.Recipes
 import com.example.recipeplanner.data.local.*
 import kotlinx.coroutines.Dispatchers
@@ -56,5 +57,22 @@ class RecipeRepository(
 
         dao.insertIngredients(ingredientEntities)
         dao.insertDirections(directionEntities)
+    }
+
+    // only load seed data on first run ( when db is empty)
+    suspend fun seedIfEmpty(initial: List<Recipes>)= withContext(Dispatchers.IO) {
+        // Check if there is already data
+        val count = dao.countRecipes()
+        Log.d("SEED", "Recipe count = $count")
+
+        if (count == 0) {
+            initial.forEachIndexed { index, r ->
+                try {
+                    addRecipe(r, r.ingredients, r.directions)
+                } catch (e: Exception) {
+                    Log.d("RecipeSeed", "Failed to insert recipe at index: $index, ${r.name}")
+                }
+            }
+        }
     }
 }

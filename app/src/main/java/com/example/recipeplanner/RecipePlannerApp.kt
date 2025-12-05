@@ -22,13 +22,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.recipeplanner.ui.RecipeViewModel
 import com.example.recipeplanner.ui.theme.AppColorScheme
 import com.example.recipeplanner.ui.theme.BurntPeach
 import com.example.recipeplanner.ui.theme.MauveBark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipePlannerApp() {
+fun RecipePlannerApp(recipeViewModel: RecipeViewModel) {
+    val recipes = recipeViewModel.recipes
     var menuExpanded by remember { mutableStateOf(false) }
     val navHostController = rememberNavController()
     var myIndex by remember { mutableStateOf(0) }
@@ -90,7 +92,9 @@ fun RecipePlannerApp() {
             ) {
                 composable("Home") { HomeScreen() }
                 composable("Menu") {
-                    MenuScreen(onRecipeClick = { index ->
+                    MenuScreen(
+                        recipes = recipes, // DB list
+                        onRecipeClick = { index ->
                         myIndex = index
                         navHostController.navigate("Details")
                     })
@@ -98,6 +102,7 @@ fun RecipePlannerApp() {
                 composable("Shopping") { ShoppingScreen() }
                 composable("Recipes") {
                     RecipeListScreen(
+                        recipes = recipes, // DB list
                         onRecipeClick = { index ->
                             myIndex = index
                             navHostController.navigate("Details")
@@ -108,15 +113,20 @@ fun RecipePlannerApp() {
                     )
                 }
                 composable("Details") {
+                    val currentRecipes = recipeViewModel.recipes
+                    val dish = currentRecipes.getOrNull(myIndex)
                     RecipeDetailScreen(
-                        index = myIndex,
+                        dish = dish,
                         onBack = { navHostController.popBackStack() }
                     )
                 }
                 composable("Add New Recipe") {
                     RecipeAddScreen(
                         onBack = { navHostController.popBackStack() },
-                        onSave = { navHostController.popBackStack() }
+                        onSave = { newRecipe, ingredients, directions ->
+                            // save to DB
+                            recipeViewModel.addRecipe(newRecipe, ingredients, directions)
+                            navHostController.popBackStack() }
                     )
                 }
             }

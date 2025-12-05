@@ -6,6 +6,7 @@ import com.example.recipeplanner.data.local.DirectionsEntity
 import com.example.recipeplanner.data.local.IngredientEntity
 import com.example.recipeplanner.data.local.RecipeEntity
 
+// helper data class used for query results.
 data class RecipeWithDetails(
     @Embedded val recipe: RecipeEntity,
 

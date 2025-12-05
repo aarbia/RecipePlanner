@@ -20,8 +20,7 @@ import com.example.recipeplanner.ui.theme.Cream
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeDetailScreen(index: Int, onBack: () -> Unit) {
-    val dish = recipe.getOrNull(index)
+fun RecipeDetailScreen(dish: Recipes?, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(

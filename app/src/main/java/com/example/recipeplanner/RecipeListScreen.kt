@@ -20,10 +20,10 @@ import com.example.recipeplanner.ui.theme.MauveBark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeListScreen(onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
+fun RecipeListScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     var selectedMeal by remember { mutableStateOf("All")}
-    var mealOptions = listOf("All", "Breakfast", "Lunch", "Dinner", "Snack", "Appetizer", "Dessert")
+    var mealOptions = listOf("All", "Breakfast", "Lunch", "Dinner", "Appetizer", "Dessert")
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)    //Add a padding before the first item (you could just use Modifier.padding(60.dp))
@@ -81,11 +81,11 @@ fun RecipeListScreen(onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
         }
         Spacer(Modifier.height(8.dp))
 
-        val filteredList = remember(selectedMeal) {
+        val filteredList = remember(selectedMeal, recipes) {
             if (selectedMeal == "All") {
-                recipe
+                recipes
             } else {
-                recipe.filter { it.meal == selectedMeal }
+                recipes.filter { it.meal == selectedMeal }
             }
         }
 
@@ -98,7 +98,12 @@ fun RecipeListScreen(onRecipeClick: (Int) -> Unit, onAddClick: () -> Unit) {
                     ),
                     modifier = Modifier.padding(8.dp)
                         .fillMaxWidth()
-                        .clickable { onRecipeClick(index) }
+                        .clickable {
+                            val originalIndex = recipes.indexOf(item)
+                            if (originalIndex != -1) {
+                                onRecipeClick(originalIndex)
+                            }
+                        }
                 ) {
                     Row(modifier = Modifier.fillMaxWidth().padding(16.dp),)
                     {

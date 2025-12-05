@@ -15,6 +15,9 @@ interface RecipeDAO {
     @Query("SELECT * FROM recipes WHERE recipe_id = :id")
     suspend fun getRecipeWithDetails(id: Int): List<RecipeWithDetails>
 
+    @Query("SELECT COUNT(*) FROM recipes")
+    suspend fun countRecipes(): Int
+
     //Insert
     @Insert
     suspend fun insertRecipe(recipe: RecipeEntity): Long
