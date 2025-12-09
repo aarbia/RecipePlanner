@@ -28,7 +28,7 @@ fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
             daysOfWeek[i] to mapOf(
                 "Breakfast" to breakfasts.getOrNull(i),
                 "Lunch" to lunches.getOrNull(i),
-                "Appetizer" to lunches.getOrNull(i),
+                "Appetizer" to appetizers.getOrNull(i),
                 "Dinner" to dinners.getOrNull(i),
                 "Dessert" to desserts.getOrNull(i)
             )
