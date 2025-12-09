@@ -17,6 +17,8 @@ fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
 
     // Pre-select 7 unique recipes for each meal type
     val breakfasts = remember(recipes) { recipes.filter { it.meal == "Breakfast" }.shuffled().take(7) }
+    val lunches = remember(recipes){recipes.filter{it.meal=="Lunch"}.shuffled().take(7)}
+    val appetizers = remember(recipes){recipes.filter{it.meal=="Appetizer"}.shuffled().take(7)}
     val dinners = remember(recipes) { recipes.filter { it.meal == "Dinner" }.shuffled().take(7) }
     val desserts = remember(recipes) { recipes.filter { it.meal == "Dessert" }.shuffled().take(7) }
 
@@ -25,6 +27,8 @@ fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
         daysOfWeek.indices.associate { i ->
             daysOfWeek[i] to mapOf(
                 "Breakfast" to breakfasts.getOrNull(i),
+                "Lunch" to lunches.getOrNull(i),
+                "Appetizer" to lunches.getOrNull(i),
                 "Dinner" to dinners.getOrNull(i),
                 "Dessert" to desserts.getOrNull(i)
             )
