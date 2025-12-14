@@ -99,7 +99,7 @@ fun RecipePlannerApp(recipeViewModel: RecipeViewModel) {
                         navHostController.navigate("Details")
                     })
                 }
-                composable("Shopping") { ShoppingScreen() }
+                composable("Shopping") { ShoppingScreen(recipes) }
                 composable("Recipes") {
                     RecipeListScreen(
                         recipes = recipes, // DB list
