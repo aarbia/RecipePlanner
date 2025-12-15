@@ -15,12 +15,47 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.example.recipeplanner.ui.RecipeViewModel
 import com.example.recipeplanner.ui.theme.Cream
+import com.example.recipeplanner.ui.theme.MauveBark
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeDetailScreen(dish: Recipes?, onBack: () -> Unit) {
+fun RecipeDetailScreen(
+    dish: Recipes?,
+    onBack: () -> Unit,
+    onAddToShopping: (Int) -> Unit,
+    recipeViewModel: RecipeViewModel
+) {
+    // Delete confirmation box
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    if (showDeleteDialog && dish != null) {
+        AlertDialog(
+            onDismissRequest = {showDeleteDialog = false},
+            title = { Text("Delete recipe?")},
+            text = { Text("This will permanently delete this recipe. Are you sure?")},
+            confirmButton = {
+                TextButton(onClick = {
+                    recipeViewModel.deleteRecipe(dish.id)
+                    showDeleteDialog = false
+                    onBack()
+                }
+                ) {Text(text = "Delete", color = MauveBark)}
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(text = "Cancel", color = MauveBark)
+                }
+            }
+        )
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -55,6 +90,34 @@ fun RecipeDetailScreen(dish: Recipes?, onBack: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(8.dp))
 
+            // Button to add current recipe to shopping list
+            dish?.let { recipe ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Cream),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth()
+                        .clickable { onAddToShopping(recipe.id) }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Add,
+                            contentDescription = "Add to Shopping List"
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            text = "Add to Shopping List",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(text = "Prep Time (mins): ${dish?.prepTimeMin?:""}", style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -77,6 +140,34 @@ fun RecipeDetailScreen(dish: Recipes?, onBack: () -> Unit) {
                 Text(text = "Step ${stepIndex}: $step")
                 Spacer(Modifier.height(4.dp))
                 stepIndex++
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Button to delete recipe
+            dish?.let { recipe ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Cream),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth()
+                        .clickable { showDeleteDialog = true }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.DeleteForever,
+                            contentDescription = "Delete Recipe"
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            text = "Delete Recipe",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
             }
 
         }

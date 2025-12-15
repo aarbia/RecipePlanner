@@ -7,12 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RecipeRepository(
-    private val dao: RecipeDAO
+    private val recipeDao: RecipeDAO
 ) {
 
     // read all recipes as your UI model
     suspend fun getAllRecipes(): List<Recipes> = withContext(Dispatchers.IO) {
-        dao.getAllRecipesWithDetails().map { it.toModel() }
+        recipeDao.getAllRecipesWithDetails().map { it.toModel() }
     }
 
     // add a new recipe + its ingredients + directions
@@ -22,7 +22,7 @@ class RecipeRepository(
         directions: List<String>
     ) = withContext(Dispatchers.IO) {
         // 1. insert into recipes table
-        val recipeId = dao.insertRecipe(
+        val recipeId = recipeDao.insertRecipe(
             RecipeEntity(
                 name = uiRecipe.name,
                 prepTimeMin = uiRecipe.prepTimeMin,
@@ -55,14 +55,18 @@ class RecipeRepository(
                 )
             }
 
-        dao.insertIngredients(ingredientEntities)
-        dao.insertDirections(directionEntities)
+        recipeDao.insertIngredients(ingredientEntities)
+        recipeDao.insertDirections(directionEntities)
+    }
+
+    suspend fun deleteRecipe(id: Int) = withContext(Dispatchers.IO) {
+        recipeDao.deleteRecipeById(id)
     }
 
     // only load seed data on first run ( when db is empty)
     suspend fun seedIfEmpty(initial: List<Recipes>)= withContext(Dispatchers.IO) {
         // Check if there is already data
-        val count = dao.countRecipes()
+        val count = recipeDao.countRecipes()
         Log.d("SEED", "Recipe count = $count")
 
         if (count == 0) {

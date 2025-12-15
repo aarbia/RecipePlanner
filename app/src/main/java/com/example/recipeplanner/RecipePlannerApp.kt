@@ -23,14 +23,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.recipeplanner.ui.RecipeViewModel
+import com.example.recipeplanner.ui.ShoppingListViewModel
+import com.example.recipeplanner.ui.WeeklyMenuViewModel
 import com.example.recipeplanner.ui.theme.AppColorScheme
 import com.example.recipeplanner.ui.theme.BurntPeach
 import com.example.recipeplanner.ui.theme.MauveBark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipePlannerApp(recipeViewModel: RecipeViewModel) {
+fun RecipePlannerApp(
+    recipeViewModel: RecipeViewModel,
+    shoppingListViewModel: ShoppingListViewModel,
+    weeklyMenuViewModel: WeeklyMenuViewModel
+) {
     val recipes = recipeViewModel.recipes
+    val shoppingListRecipes = shoppingListViewModel.shoppingRecipes
+    val shoppingListItems = shoppingListViewModel.shoppingItems
+
     var menuExpanded by remember { mutableStateOf(false) }
     val navHostController = rememberNavController()
     var myIndex by remember { mutableStateOf(0) }
@@ -99,7 +108,9 @@ fun RecipePlannerApp(recipeViewModel: RecipeViewModel) {
                         navHostController.navigate("Details")
                     })
                 }
-                composable("Shopping") { ShoppingScreen(recipes) }
+                composable("Shopping") { ShoppingScreen(
+                    shoppingListViewModel = shoppingListViewModel
+                ) }
                 composable("Recipes") {
                     RecipeListScreen(
                         recipes = recipes, // DB list
@@ -117,7 +128,9 @@ fun RecipePlannerApp(recipeViewModel: RecipeViewModel) {
                     val dish = currentRecipes.getOrNull(myIndex)
                     RecipeDetailScreen(
                         dish = dish,
-                        onBack = { navHostController.popBackStack() }
+                        onBack = { navHostController.popBackStack() },
+                        onAddToShopping = { id -> shoppingListViewModel.addRecipeToShopping(id)},
+                        recipeViewModel = recipeViewModel
                     )
                 }
                 composable("Add New Recipe") {

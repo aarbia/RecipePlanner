@@ -7,8 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.recipeplanner.data.RecipeRepository
+import com.example.recipeplanner.data.ShoppingRepository
+import com.example.recipeplanner.data.WeeklyMenuRepository
 import com.example.recipeplanner.data.local.RecipeDatabase
 import com.example.recipeplanner.ui.RecipeViewModel
+import com.example.recipeplanner.ui.ShoppingListViewModel
+import com.example.recipeplanner.ui.WeeklyMenuViewModel
 import com.example.recipeplanner.ui.theme.RecipePlannerTheme
 import kotlinx.coroutines.launch
 
@@ -16,34 +20,53 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // build DB + DAO + Repository
+        // build DB
         val db = RecipeDatabase.getInstance(applicationContext)
-        val dao = db.recipeDAO()
-        val repo = RecipeRepository(dao)
+
+        // Reference DAOs
+        val recipeDao = db.recipeDAO()
+        val shoppingListDao = db.shoppingListDAO()
+        val weeklyMenuDao = db.weeklyMenuDAO()
+
+        // Repositories
+        val recipeRepo = RecipeRepository(recipeDao)
+        val shoppingListRepo = ShoppingRepository(shoppingListDao, recipeDao)
+        val weeklyMenuRepo = WeeklyMenuRepository(weeklyMenuDao, recipeDao)
 
         // seed DB once (if empty)
         lifecycleScope.launch {
-            repo.seedIfEmpty(seedRecipes)
+            recipeRepo.seedIfEmpty(seedRecipes)
         }
 
-        // build ViewModel with repo
+        // build Factory for all ViewModels
         val viewModelFactory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(RecipeViewModel::class.java)) {
-                    return RecipeViewModel(repo) as T
+                return when {
+                    modelClass.isAssignableFrom(RecipeViewModel::class.java) ->
+                        RecipeViewModel(recipeRepo) as T
+                    modelClass.isAssignableFrom(ShoppingListViewModel::class.java) ->
+                        ShoppingListViewModel(shoppingListRepo) as T
+                    modelClass.isAssignableFrom(WeeklyMenuViewModel::class.java) ->
+                        WeeklyMenuViewModel(weeklyMenuRepo) as T
+                    else -> throw IllegalArgumentException("Unkown ViewModel class: ${modelClass.name}")
                 }
-                throw IllegalArgumentException("Unknown ViewModel class")
             }
         }
 
-        val recipeViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(RecipeViewModel::class.java)
+        // Create ViewModels
+        val recipeViewModel = ViewModelProvider(this, viewModelFactory)[RecipeViewModel::class.java]
+        val shoppingListViewModel = ViewModelProvider(this, viewModelFactory)[ShoppingListViewModel::class.java]
+        val weeklyMenuViewModel = ViewModelProvider(this, viewModelFactory)[WeeklyMenuViewModel::class.java]
 
         // pass ViewModel into composable
         setContent {
             RecipePlannerTheme {
-                RecipePlannerApp(recipeViewModel)
+                RecipePlannerApp(
+                    recipeViewModel = recipeViewModel,
+                    shoppingListViewModel = shoppingListViewModel,
+                    weeklyMenuViewModel = weeklyMenuViewModel
+                    )
             }
         }
     }

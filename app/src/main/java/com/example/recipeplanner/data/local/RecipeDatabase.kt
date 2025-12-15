@@ -9,13 +9,19 @@ import androidx.room.RoomDatabase
     entities = [
         RecipeEntity::class,
         IngredientEntity::class,
-        DirectionsEntity::class
+        DirectionsEntity::class,
+        WeeklyMenuEntity::class,
+        ShoppingItemsEntity::class,
+        ShoppingRecipesEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class RecipeDatabase : RoomDatabase() {
     abstract fun recipeDAO(): RecipeDAO
+    abstract fun weeklyMenuDAO(): WeeklyMenuDAO
+    abstract fun shoppingListDAO(): ShoppingListDAO
+
     companion object {
         @Volatile
         private var INSTANCE: RecipeDatabase? = null
@@ -23,10 +29,10 @@ abstract class RecipeDatabase : RoomDatabase() {
         fun getInstance(context: Context): RecipeDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    RecipeDatabase::class.java,
-                    "recipes.db"
-                ).build()
+                                context.applicationContext,
+                                RecipeDatabase::class.java,
+                                "recipes.db"
+                            ).fallbackToDestructiveMigrationFrom(1).build()
                 INSTANCE = instance
                 instance
             }

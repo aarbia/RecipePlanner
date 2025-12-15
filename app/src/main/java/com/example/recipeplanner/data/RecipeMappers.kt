@@ -5,6 +5,7 @@ import com.example.recipeplanner.Recipes
 // This class will convert DB joined object -> UI model
 fun RecipeWithDetails.toModel(): Recipes =
     Recipes(
+        id = recipe.recipe_id,
         name = recipe.name,
         prepTimeMin = recipe.prepTimeMin,
         cookTimeMin = recipe.cookTimeMin,

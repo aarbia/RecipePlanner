@@ -14,7 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -178,7 +178,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: (Recipes, List<String>, List<Str
                         enabled = ingredientsText.size > 1
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Clear,
+                            imageVector = Icons.Default.DeleteForever,
                             contentDescription = "Remove"
                         )
                     }
@@ -207,7 +207,7 @@ fun RecipeAddScreen(onBack: () -> Unit, onSave: (Recipes, List<String>, List<Str
                         enabled = directionsText.size > 1
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Clear,
+                            imageVector = Icons.Default.DeleteForever,
                             contentDescription = "Remove"
                         )
                     }

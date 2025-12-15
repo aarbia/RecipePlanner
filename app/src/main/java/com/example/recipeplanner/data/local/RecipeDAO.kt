@@ -29,17 +29,10 @@ interface RecipeDAO {
     suspend fun insertDirections(directions: List<DirectionsEntity>)
 
     //Update/delete
-
     @Update
     suspend fun updateRecipe(recipe: RecipeEntity)
 
-    @Delete
-    suspend fun deleteRecipe(recipe: RecipeEntity)
-
-    @Query("DELETE FROM ingredients WHERE recipe_id = :recipeID")
-    suspend fun deleteIngredientsForRecipe(recipeID: Int)
-
-    @Query("DELETE FROM directions WHERE recipe_id = :recipeID")
-    suspend fun deleteDirectionsForRecipe(recipeID: Int)
+    @Query("DELETE FROM recipes WHERE recipe_id = :id")
+    suspend fun deleteRecipeById(id: Int)
 
 }
