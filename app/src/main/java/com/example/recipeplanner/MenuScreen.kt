@@ -2,37 +2,28 @@ package com.example.recipeplanner
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.stylusHoverIcon
 import androidx.compose.ui.unit.dp
+import com.example.recipeplanner.ui.WeeklyMenuViewModel
 import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
 
 @Composable
-fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
+fun MenuScreen(weeklyMenuViewModel: WeeklyMenuViewModel, onRecipeClick: (Int) -> Unit) {
     val daysOfWeek = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
-    // Pre-select 7 unique recipes for each meal type
-    val breakfasts = remember(recipes) { recipes.filter { it.meal == "Breakfast" }.shuffled().take(7) }
-    val lunches = remember(recipes){recipes.filter{it.meal=="Lunch"}.shuffled().take(7)}
-    val appetizers = remember(recipes){recipes.filter{it.meal=="Appetizer"}.shuffled().take(7)}
-    val dinners = remember(recipes) { recipes.filter { it.meal == "Dinner" }.shuffled().take(7) }
-    val desserts = remember(recipes) { recipes.filter { it.meal == "Dessert" }.shuffled().take(7) }
+    // Pull DB menu from view model
+    val weeklyMenu = weeklyMenuViewModel.menu
 
-    // Assign one recipe per meal per day
-    val weeklyMenu = remember(recipes) {
-        daysOfWeek.indices.associate { i ->
-            daysOfWeek[i] to mapOf(
-                "Breakfast" to breakfasts.getOrNull(i),
-                "Lunch" to lunches.getOrNull(i),
-                "Appetizer" to appetizers.getOrNull(i),
-                "Dinner" to dinners.getOrNull(i),
-                "Dessert" to desserts.getOrNull(i)
-            )
-        }
+    //Load when screen first appears
+    LaunchedEffect(Unit) {
+        weeklyMenuViewModel.loadWeek()
     }
 
     LazyColumn(
@@ -40,8 +31,39 @@ fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        item {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text(
+                    text = "Weekly Menu - ${weeklyMenuViewModel.weekStart}",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MauveBark
+                )
+            }
+            if (weeklyMenu.isEmpty()) {
+                Button(onClick = {weeklyMenuViewModel.generateThisWeek()}) {
+                    Text("Generate this week's menu!")
+                }
+            } else {
+                OutlinedButton(onClick = { weeklyMenuViewModel.clearThisWeek()}) {
+                    Text("Clear week's menu.")
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+        }
+
+        if (weeklyMenu.isEmpty()) {
+            item {
+                Text(
+                    text = "No menu created yet. Tap Generate button to continue.",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MauveBark
+                )
+            }
+        } else {
+
+        }
         items(daysOfWeek) { day ->
-            val menu = weeklyMenu[day]!!
+            val menuForDay = weeklyMenu[day].orEmpty()
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -52,13 +74,22 @@ fun MenuScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit) {
                     Text(text = day, style = MaterialTheme.typography.titleLarge, color = MauveBark)
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    menu.forEach { (mealType, recipeItem) ->
-                        recipeItem?.let { recipe ->
+                    val mealOrder = listOf("Breakfast", "Lunch", "Appetizer", "Dinner", "Dessert")
+                    mealOrder.forEach { mealType ->
+                        val recipe = menuForDay[mealType]
+                        if (recipe != null){
                             Text(
                                 text = "$mealType: ${recipe.name}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 modifier = Modifier
-                                    .clickable { onRecipeClick(recipes.indexOf(recipe)) }
+                                    .clickable { onRecipeClick(recipe.id) }
+                                    .padding(vertical = 2.dp)
+                            )
+                        } else {
+                            Text(
+                                text = "$mealType: -",
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier
                                     .padding(vertical = 2.dp)
                             )
                         }

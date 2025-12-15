@@ -42,6 +42,8 @@ class WeeklyMenuRepository(
         val all = recipeDao.getAllRecipesWithDetails().map { it.toModel() }
 
         val breakfasts = all.filter { it.meal.equals("Breakfast", true) }.shuffled().take(7)
+        val lunches = all.filter { it.meal.equals("Lunch", true) }.shuffled().take(7)
+        val appetizers = all.filter { it.meal.equals("Appetizer", true) }.shuffled().take(7)
         val dinners    = all.filter { it.meal.equals("Dinner", true) }.shuffled().take(7)
         val desserts   = all.filter { it.meal.equals("Dessert", true) }.shuffled().take(7)
 
@@ -49,6 +51,12 @@ class WeeklyMenuRepository(
         for (i in 0..6) {
             breakfasts.getOrNull(i)?.let { r ->
                 entries.add(WeeklyMenuEntity(weekStart = weekStart, dayOfWeek = i, mealType = "Breakfast", recipe_id = r.id))
+            }
+            lunches.getOrNull(i)?.let { r ->
+                entries.add(WeeklyMenuEntity(weekStart = weekStart, dayOfWeek = i, mealType = "Lunch", recipe_id = r.id))
+            }
+            appetizers.getOrNull(i)?.let { r ->
+                entries.add(WeeklyMenuEntity(weekStart = weekStart, dayOfWeek = i, mealType = "Appetizer", recipe_id = r.id))
             }
             dinners.getOrNull(i)?.let { r ->
                 entries.add(WeeklyMenuEntity(weekStart = weekStart, dayOfWeek = i, mealType = "Dinner", recipe_id = r.id))

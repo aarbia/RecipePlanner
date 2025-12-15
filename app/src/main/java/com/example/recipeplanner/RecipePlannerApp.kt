@@ -102,7 +102,7 @@ fun RecipePlannerApp(
                 composable("Home") { HomeScreen() }
                 composable("Menu") {
                     MenuScreen(
-                        recipes = recipes, // DB list
+                        weeklyMenuViewModel = weeklyMenuViewModel, // DB list
                         onRecipeClick = { index ->
                         myIndex = index
                         navHostController.navigate("Details")
