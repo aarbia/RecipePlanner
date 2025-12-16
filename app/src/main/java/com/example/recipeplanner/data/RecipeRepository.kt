@@ -59,6 +59,55 @@ class RecipeRepository(
         recipeDao.insertDirections(directionEntities)
     }
 
+    // add a new recipe + its ingredients + directions
+    suspend fun updateRecipe(
+        uiRecipe: Recipes,
+        ingredients: List<String>,
+        directions: List<String>
+    ) = withContext(Dispatchers.IO) {
+        // 1. insert into recipes table
+        recipeDao.updateRecipe(
+            RecipeEntity(
+                recipe_id = uiRecipe.id,
+                name = uiRecipe.name,
+                prepTimeMin = uiRecipe.prepTimeMin,
+                cookTimeMin = uiRecipe.cookTimeMin,
+                servings = uiRecipe.servings,
+                meal = uiRecipe.meal,
+                image = uiRecipe.image
+            )
+        )
+
+        // Clear ingredients and directions
+        recipeDao.deleteIngredients(uiRecipe.id)
+        recipeDao.deleteDirections(uiRecipe.id)
+
+        // 2. insert ingredients
+        val ingredientEntities = ingredients
+            .filter { it.isNotBlank() }
+            .mapIndexed { index, txt ->
+                IngredientEntity(
+                    recipe_id = uiRecipe.id,
+                    position = index,
+                    ingredient = txt
+                )
+            }
+
+        // 3. insert directions
+        val directionEntities = directions
+            .filter { it.isNotBlank() }
+            .mapIndexed { index, txt ->
+                DirectionsEntity(
+                    recipe_id = uiRecipe.id,
+                    step_num = index + 1,
+                    direction = txt
+                )
+            }
+
+        recipeDao.insertIngredients(ingredientEntities)
+        recipeDao.insertDirections(directionEntities)
+    }
+
     suspend fun deleteRecipe(id: Int) = withContext(Dispatchers.IO) {
         recipeDao.deleteRecipeById(id)
     }

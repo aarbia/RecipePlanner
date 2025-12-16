@@ -133,6 +133,9 @@ fun RecipePlannerApp(
                         dish = dish,
                         onBack = { navHostController.popBackStack() },
                         onAddToShopping = { id -> shoppingListViewModel.addRecipeToShopping(id)},
+                        onEditClick = {recipeId ->
+                            selectedRecipeId = recipeId
+                            navHostController.navigate("Edit Recipe")},
                         recipeViewModel = recipeViewModel
                     )
                 }
@@ -142,6 +145,18 @@ fun RecipePlannerApp(
                         onSave = { newRecipe, ingredients, directions ->
                             // save to DB
                             recipeViewModel.addRecipe(newRecipe, ingredients, directions)
+                            navHostController.popBackStack() }
+                    )
+                }
+                composable("Edit Recipe") {
+                    val currentRecipes = recipeViewModel.recipes
+                    val dish = currentRecipes.firstOrNull{it.id ==selectedRecipeId}
+                    RecipeEditScreen(
+                        dish = dish,
+                        onBack = { navHostController.popBackStack() },
+                        onSave = { update, ingredients, directions ->
+                            // save to DB
+                            recipeViewModel.updateRecipe(update, ingredients, directions)
                             navHostController.popBackStack() }
                     )
                 }

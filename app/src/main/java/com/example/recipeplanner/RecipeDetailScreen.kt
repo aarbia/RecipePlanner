@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,7 +33,8 @@ fun RecipeDetailScreen(
     dish: Recipes?,
     onBack: () -> Unit,
     onAddToShopping: (Int) -> Unit,
-    recipeViewModel: RecipeViewModel
+    recipeViewModel: RecipeViewModel,
+    onEditClick: (Int) -> Unit
 ) {
     // Delete confirmation box
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -142,6 +144,33 @@ fun RecipeDetailScreen(
                 stepIndex++
             }
             Spacer(modifier = Modifier.height(8.dp))
+
+            // Button to edit recipe
+            dish?.let { recipe ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Cream),
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth()
+                        .clickable { onEditClick(dish.id) }
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Edit Recipe"
+                        )
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            text = "Edit Recipe",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                }
+            }
 
             // Button to delete recipe
             dish?.let { recipe ->

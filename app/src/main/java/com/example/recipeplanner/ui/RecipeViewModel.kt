@@ -32,6 +32,13 @@ class RecipeViewModel(private val repo: RecipeRepository) : ViewModel() {
         }
     }
 
+    fun updateRecipe(r: Recipes, ingredients: List<String>, directions: List<String>) {
+        viewModelScope.launch {
+            repo.updateRecipe(r, ingredients, directions)
+            loadRecipes()
+        }
+    }
+
     fun deleteRecipe(id: Int) {
         viewModelScope.launch {
             repo.deleteRecipe(id)
