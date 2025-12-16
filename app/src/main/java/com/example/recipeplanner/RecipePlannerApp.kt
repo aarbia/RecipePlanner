@@ -1,5 +1,7 @@
 package com.example.recipeplanner
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +31,7 @@ import com.example.recipeplanner.ui.theme.AppColorScheme
 import com.example.recipeplanner.ui.theme.BurntPeach
 import com.example.recipeplanner.ui.theme.MauveBark
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipePlannerApp(
@@ -39,10 +42,10 @@ fun RecipePlannerApp(
     val recipes = recipeViewModel.recipes
     val shoppingListRecipes = shoppingListViewModel.shoppingRecipes
     val shoppingListItems = shoppingListViewModel.shoppingItems
+    var selectedRecipeId by remember { mutableStateOf<Int?>(null) }
 
     var menuExpanded by remember { mutableStateOf(false) }
     val navHostController = rememberNavController()
-    var myIndex by remember { mutableStateOf(0) }
 
     // observe (highlight) the correct bottom navigation icon when the user switches screens.
     val currentScreen by navHostController.currentBackStackEntryAsState()
@@ -103,8 +106,8 @@ fun RecipePlannerApp(
                 composable("Menu") {
                     MenuScreen(
                         weeklyMenuViewModel = weeklyMenuViewModel, // DB list
-                        onRecipeClick = { index ->
-                        myIndex = index
+                        onRecipeClick = { recipeId ->
+                        selectedRecipeId = recipeId
                         navHostController.navigate("Details")
                     })
                 }
@@ -114,8 +117,8 @@ fun RecipePlannerApp(
                 composable("Recipes") {
                     RecipeListScreen(
                         recipes = recipes, // DB list
-                        onRecipeClick = { index ->
-                            myIndex = index
+                        onRecipeClick = { recipeId ->
+                            selectedRecipeId = recipeId
                             navHostController.navigate("Details")
                         },
                         onAddClick = {
@@ -125,7 +128,7 @@ fun RecipePlannerApp(
                 }
                 composable("Details") {
                     val currentRecipes = recipeViewModel.recipes
-                    val dish = currentRecipes.getOrNull(myIndex)
+                    val dish = currentRecipes.firstOrNull{it.id ==selectedRecipeId}
                     RecipeDetailScreen(
                         dish = dish,
                         onBack = { navHostController.popBackStack() },

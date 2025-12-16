@@ -1,5 +1,7 @@
 package com.example.recipeplanner
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +16,7 @@ import com.example.recipeplanner.ui.WeeklyMenuViewModel
 import com.example.recipeplanner.ui.theme.Cream
 import com.example.recipeplanner.ui.theme.MauveBark
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MenuScreen(weeklyMenuViewModel: WeeklyMenuViewModel, onRecipeClick: (Int) -> Unit) {
     val daysOfWeek = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
