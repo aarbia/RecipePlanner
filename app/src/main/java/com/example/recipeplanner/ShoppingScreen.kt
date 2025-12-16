@@ -60,7 +60,7 @@ fun ShoppingScreen(shoppingListViewModel: ShoppingListViewModel) {
         if (recipes.isEmpty()) {
             item {
                 Text(
-                    text = "No recipes added. Open a recipe and selecgt \"Add to shopping List\".",
+                    text = "No recipes added. Open a recipe and select \"Add to shopping List\".",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MauveBark
                 )
