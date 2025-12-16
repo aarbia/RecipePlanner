@@ -1,8 +1,10 @@
 package com.example.recipeplanner
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +19,7 @@ import com.example.recipeplanner.ui.theme.RecipePlannerTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,6 +43,7 @@ class MainActivity : ComponentActivity() {
 
         // build Factory for all ViewModels
         val viewModelFactory = object : ViewModelProvider.Factory {
+            @RequiresApi(Build.VERSION_CODES.O)
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return when {
@@ -49,7 +53,7 @@ class MainActivity : ComponentActivity() {
                         ShoppingListViewModel(shoppingListRepo) as T
                     modelClass.isAssignableFrom(WeeklyMenuViewModel::class.java) ->
                         WeeklyMenuViewModel(weeklyMenuRepo) as T
-                    else -> throw IllegalArgumentException("Unkown ViewModel class: ${modelClass.name}")
+                    else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }
             }
         }
