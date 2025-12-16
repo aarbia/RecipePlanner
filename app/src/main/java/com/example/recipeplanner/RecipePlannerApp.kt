@@ -128,7 +128,7 @@ fun RecipePlannerApp(
                 }
                 composable("Details") {
                     val currentRecipes = recipeViewModel.recipes
-                    val dish = currentRecipes.firstOrNull{it.id ==selectedRecipeId}
+                    val dish = currentRecipes.firstOrNull{it.id == selectedRecipeId}
                     RecipeDetailScreen(
                         dish = dish,
                         onBack = { navHostController.popBackStack() },

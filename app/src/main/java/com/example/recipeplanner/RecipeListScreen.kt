@@ -99,10 +99,7 @@ fun RecipeListScreen(recipes: List<Recipes>, onRecipeClick: (Int) -> Unit, onAdd
                     modifier = Modifier.padding(8.dp)
                         .fillMaxWidth()
                         .clickable {
-                            val originalIndex = recipes.indexOf(item)
-                            if (originalIndex != -1) {
-                                onRecipeClick(originalIndex)
-                            }
+                            onRecipeClick(item.id)
                         }
                 ) {
                     Row(modifier = Modifier.fillMaxWidth().padding(16.dp),)
