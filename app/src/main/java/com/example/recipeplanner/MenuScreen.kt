@@ -35,7 +35,10 @@ fun MenuScreen(weeklyMenuViewModel: WeeklyMenuViewModel, onRecipeClick: (Int) ->
             .padding(16.dp)
     ) {
         item {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
                     text = "Weekly Menu - ${weeklyMenuViewModel.weekStart}",
                     style = MaterialTheme.typography.titleLarge,
@@ -43,11 +46,11 @@ fun MenuScreen(weeklyMenuViewModel: WeeklyMenuViewModel, onRecipeClick: (Int) ->
                 )
             }
             if (weeklyMenu.isEmpty()) {
-                Button(onClick = {weeklyMenuViewModel.generateThisWeek()}) {
+                Button(onClick = { weeklyMenuViewModel.generateThisWeek() }) {
                     Text("Generate this week's menu!")
                 }
             } else {
-                OutlinedButton(onClick = { weeklyMenuViewModel.clearThisWeek()}) {
+                OutlinedButton(onClick = { weeklyMenuViewModel.clearThisWeek() }) {
                     Text("Clear week's menu.")
                 }
             }
@@ -63,38 +66,42 @@ fun MenuScreen(weeklyMenuViewModel: WeeklyMenuViewModel, onRecipeClick: (Int) ->
                 )
             }
         } else {
+            items(daysOfWeek) { day ->
+                val menuForDay = weeklyMenu[day].orEmpty()
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp),
+                    colors = CardDefaults.cardColors(containerColor = Cream)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = day,
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MauveBark
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
 
-        }
-        items(daysOfWeek) { day ->
-            val menuForDay = weeklyMenu[day].orEmpty()
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                colors = CardDefaults.cardColors(containerColor = Cream)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = day, style = MaterialTheme.typography.titleLarge, color = MauveBark)
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    val mealOrder = listOf("Breakfast", "Lunch", "Appetizer", "Dinner", "Dessert")
-                    mealOrder.forEach { mealType ->
-                        val recipe = menuForDay[mealType]
-                        if (recipe != null){
-                            Text(
-                                text = "$mealType: ${recipe.name}",
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier
-                                    .clickable { onRecipeClick(recipe.id) }
-                                    .padding(vertical = 2.dp)
-                            )
-                        } else {
-                            Text(
-                                text = "$mealType: -",
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier
-                                    .padding(vertical = 2.dp)
-                            )
+                        val mealOrder =
+                            listOf("Breakfast", "Lunch", "Appetizer", "Dinner", "Dessert")
+                        mealOrder.forEach { mealType ->
+                            val recipe = menuForDay[mealType]
+                            if (recipe != null) {
+                                Text(
+                                    text = "$mealType: ${recipe.name}",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier
+                                        .clickable { onRecipeClick(recipe.id) }
+                                        .padding(vertical = 2.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = "$mealType: -",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp)
+                                )
+                            }
                         }
                     }
                 }
