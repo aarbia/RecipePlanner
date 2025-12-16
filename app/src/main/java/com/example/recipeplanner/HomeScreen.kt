@@ -60,7 +60,7 @@ fun HomeScreen() {
 
         if (todaysMenu.isEmpty()) {
             Text(
-                text = "No menu today",
+                text = "Menu has not been generated. Go to Weekly Menu and generate this weeks menu! ",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MauveBark
             )
